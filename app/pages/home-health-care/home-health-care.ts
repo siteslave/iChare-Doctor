@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ActionSheet, Loading, Toast, Alert, LocalStorage, Storage } from 'ionic-angular';
+import { NavController, Platform, ActionSheet, Loading, Toast, Alert, LocalStorage, Storage } from 'ionic-angular';
+import {BarcodeScanner} from 'ionic-native';
+
+import * as _ from 'lodash';
 
 import {HhcEntryPage} from '../hhc-entry/hhc-entry';
 import {HhcHistoryPage} from '../hhc-history/hhc-history';
@@ -7,6 +10,7 @@ import {HhcHistoryPage} from '../hhc-history/hhc-history';
 import {Encrypt} from '../../providers/encrypt/encrypt';
 import {Configure} from '../../providers/configure/configure';
 import {Hhc} from '../../providers/hhc/hhc';
+import {OutPatientPage} from '../out-patient/out-patient';
 
 interface CommunityServiceData {
   id: any,
@@ -31,36 +35,47 @@ export class HomeHealthCarePage implements OnInit {
   query;
   patients;
   localStorage;
+  hasPatient: boolean = false;
+  isAndroid: boolean = false;
 
   constructor(
     private nav: NavController,
     private configure: Configure,
     private encrypt: Encrypt,
-    private hhc: Hhc
+    private hhc: Hhc,
+    private platform: Platform
   ) {
     this.localStorage = new Storage(LocalStorage);
     this.url = this.configure.getUrl();
+    this.isAndroid = this.platform.is('android');
   }
 
   ngOnInit() {
 
   }
 
-  showAction(hn) {
+  showAction(hashKey) {
     let actionSheet = ActionSheet.create({
       title: 'เมนูใช้งาน',
       buttons: [
         {
           text: 'บันทึกเยี่ยมบ้าน',
           handler: () => {
-            this.nav.push(HhcEntryPage, { hn: hn })
+            this.nav.push(HhcEntryPage, { hashKey: hashKey })
           }
         }, {
           text: 'ประวัติเยี่ยมบ้าน',
           handler: () => {
-            this.nav.push(HhcHistoryPage, { hn: hn });
+            this.nav.push(HhcHistoryPage, { hashKey: hashKey });
           }
-        }, {
+        },
+        {
+          text: 'ประวัติรับบริการ (EMR)',
+          handler: () => {
+            this.nav.push(OutPatientPage, { hashKey: hashKey });
+          }
+        }
+        , {
           text: 'ยกเลิก',
           role: 'cancel',
           handler: () => {
@@ -106,4 +121,15 @@ export class HomeHealthCarePage implements OnInit {
     }
   }
 
+  scanBarcode() {
+    BarcodeScanner.scan().then((barcodeData) => {
+      // Success! Barcode data is here
+      // alert(JSON.stringify(barcodeData));
+      this.query = barcodeData.text;
+      this.doSearch(this.query);
+    }, (err) => {
+      // An error occurred
+      console.log(err);
+    });
+  }  
 }

@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {HomePage} from '../home/home';
 import {HomeHealthCarePage} from '../home-health-care/home-health-care';
 import {EmrPage} from '../emr/emr';
+import {ChatPage} from '../chat/chat';
 
 
 @Component({
@@ -18,6 +19,6 @@ export class TabsPage {
     // should be each tab's root Page
     this.tab1Root = HomePage;
     this.tab2Root = HomeHealthCarePage;
-    this.tab3Root = EmrPage;
+    this.tab3Root = ChatPage;
   }
 }

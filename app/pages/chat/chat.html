@@ -1,0 +1,31 @@
+
+<ion-header>
+
+  <ion-navbar primary>
+    <ion-title>Chat</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+<ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+
+  <ion-list>
+    <ion-item-group>
+
+      <ion-item-divider light>A</ion-item-divider>
+       <button ion-item (click)="goChat()">
+        <ion-avatar item-left>
+          <img src="img/avatar-cher.png">
+        </ion-avatar>
+        <h2>Cher</h2>
+        <p>Ugh. As if.</p>
+        <ion-icon *ngIf="isAndroid" item-right name="arrow-forward" light></ion-icon>
+      </button>
+
+    </ion-item-group>
+  </ion-list>
+
+
+</ion-content>

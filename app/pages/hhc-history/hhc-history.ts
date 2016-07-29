@@ -19,7 +19,7 @@ import {Encrypt} from '../../providers/encrypt/encrypt';
   
 export class HhcHistoryPage implements OnInit {
   isAndroid: boolean = false;
-  hn;
+  hashKey;
   localStorage;
   url;
   histories;
@@ -35,7 +35,7 @@ export class HhcHistoryPage implements OnInit {
   ) {
     this.localStorage = new Storage(LocalStorage);
     this.isAndroid = platform.is('android');
-    this.hn = this.navParams.get('hn');
+    this.hashKey = this.navParams.get('hashKey');
     this.url = this.configure.getUrl();
   }
 
@@ -49,7 +49,7 @@ export class HhcHistoryPage implements OnInit {
 
   getHistory() {
     let url = `${this.url}/api/doctor/hhc/history`;
-    let params = { hn: this.hn };
+    let params = { hashKey: this.hashKey };
     let _params = this.encrypt.encrypt(params);
     this.localStorage.get('token')
       .then(token => {

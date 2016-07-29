@@ -1,0 +1,24 @@
+
+<ion-header>
+  <ion-navbar primary>
+    <ion-title>ผู้ป่วยนอก (OPD)</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="out-patient">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-round-down"
+      refreshingSpinner="dots">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <button ion-item (click)="gotoDetail(item.vn)" *ngFor="let item of services">
+      <h2>{{ item.vstdate }} {{ item.vsttime }} น.</h2>
+      <p>{{ item.department }}</p>
+      <p>{{ item.cc }}</p>
+      <ion-icon *ngIf="isAndroid" item-right name="arrow-forward" light></ion-icon>
+    </button>
+  </ion-list>
+</ion-content>

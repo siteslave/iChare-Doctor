@@ -27,7 +27,7 @@ export class HhcEntryPage implements OnInit {
   dateServ; timeServ;
   url;
   localStorage;
-  hn;
+  hashKey;
 
   constructor(
     private nav: NavController,
@@ -38,7 +38,7 @@ export class HhcEntryPage implements OnInit {
   ) {
 
     this.communityServices = [];
-    this.hn = this.navParams.get('hn');
+    this.hashKey = this.navParams.get('hashKey');
     this.localStorage = new Storage(LocalStorage);
   }
   
@@ -63,7 +63,7 @@ export class HhcEntryPage implements OnInit {
   save() {
     let params = {
       communityServiceId: this.communitySeviceId,
-      hn: this.hn,
+      hashKey: this.hashKey,
       dbp: this.dbp,
       sbp: this.sbp,
       height: this.height,
@@ -76,7 +76,7 @@ export class HhcEntryPage implements OnInit {
       timeServ: this.timeServ
     };
 
-    if (params.communityServiceId && params.hn && params.sbp && params.dbp && params.height && params.weight) {
+    if (params.communityServiceId && params.hashKey && params.sbp && params.dbp && params.height && params.weight) {
 
       let _params = this.encrypt.encrypt(params);
       console.log(_params);

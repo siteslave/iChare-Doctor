@@ -4,14 +4,28 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding class="home">
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>app/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+<ion-content class="home">
+     <ion-item-group>
+
+      <ion-item-divider light>Main Menu</ion-item-divider>
+      <button ion-item>
+        <ion-icon name="clipboard" item-left large primary></ion-icon>
+        <h2>About</h2>
+        <p>เกี่ยวกับโปรแกรม</p>
+        <ion-icon *ngIf="isAndroid" item-right name="arrow-forward" light></ion-icon>
+      </button>
+      <button ion-item>
+        <ion-icon name="megaphone" item-left large teal></ion-icon>
+        <h2>Policy</h2>
+        <p>ข้อตกลงการใช้งาน</p>
+        <ion-icon *ngIf="isAndroid" item-right name="arrow-forward" light></ion-icon>
+      </button>
+      <button ion-item>
+        <ion-icon name="exit" item-left large secondary></ion-icon>
+        <h2>Logout</h2>
+        <p>ออกจากระบบ</p>
+        <ion-icon *ngIf="isAndroid" item-right name="arrow-forward" light></ion-icon>
+      </button>
+
+    </ion-item-group>
 </ion-content>
