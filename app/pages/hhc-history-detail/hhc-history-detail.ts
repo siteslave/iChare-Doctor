@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, Alert, Loading, Toast, Storage, LocalStorage } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController, ToastController, Storage, LocalStorage } from 'ionic-angular';
 import * as moment from 'moment';
 
 import {Hhc} from '../../providers/hhc/hhc';
@@ -50,7 +50,10 @@ export class HhcHistoryDetailPage implements OnInit{
     private navParams: NavParams,
     private configure: Configure,
     private encrypt: Encrypt,
-    private hhc: Hhc
+    private hhc: Hhc,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController
   ) {
     this.id = this.navParams.get('id');
     console.log(this.id);
@@ -61,11 +64,11 @@ export class HhcHistoryDetailPage implements OnInit{
 
   ngOnInit() {
 
-    let loading = Loading.create({
+    let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
 
-    this.nav.present(loading);
+    loading.present();
     
     let url = `${this.url}/api/doctor/hhc/detail`;
     let _url = `${this.url}/basic/community-service-type`;
@@ -95,20 +98,20 @@ export class HhcHistoryDetailPage implements OnInit{
             loading.dismiss();
           }, err => {
             loading.dismiss();
-            let toast = Toast.create({
+            let toast = this.toastCtrl.create({
               message: 'เกิดข้อผิดพลาด ' + JSON.stringify(err),
               duration: 3000,
               position: 'top'
             });
 
-            this.nav.present(toast);
+            toast.present();
           });  
     })
   }
 
   remove() {
 
-    let confirm = Alert.create({
+    let confirm = this.alertCtrl.create({
       title: 'ยืนยันการลบ?',
       message: 'คุณต้องการลบรายการนี้ ใช่หรือไม่?',
       buttons: [
@@ -127,22 +130,22 @@ export class HhcHistoryDetailPage implements OnInit{
 
                 this.hhc.remove(url, token, params)
                   .then(() => {
-                    let toast = Toast.create({
+                    let toast = this.toastCtrl.create({
                       message: 'ลบรายการเสร็จเรียบร้อย',
                       duration: 3000,
                       position: 'top'
                     });
 
-                    this.nav.present(toast);
+                    toast.present();
                     this.nav.pop();
                   }, err => {
-                    let toast = Toast.create({
+                    let toast = this.toastCtrl.create({
                       message: 'เกิดข้อผิดพลาด ' + JSON.stringify(err),
                       duration: 3000,
                       position: 'top'
                     });
 
-                    this.nav.present(toast);
+                    toast.present();
                   });
               });
           }
@@ -156,7 +159,7 @@ export class HhcHistoryDetailPage implements OnInit{
       ]
     });
 
-    this.nav.present(confirm);    
+    confirm.present();  
     
   }
 
@@ -190,35 +193,35 @@ export class HhcHistoryDetailPage implements OnInit{
 
           this.hhc.update(url, token, _params)
             .then(() => {
-               let toast = Toast.create({
+               let toast = this.toastCtrl.create({
                 message: 'บันทึกเสร็จเรียบร้อย',
                 duration: 3000,
                 position: 'top'
               });
 
-              this.nav.present(toast);
-              this.nav.pop();
+               toast.present();
+               this.nav.pop();
             }, err => {
-              let toast = Toast.create({
+              let toast = this.toastCtrl.create({
                 message: 'เกิดข้อผิดพลาด ' + JSON.stringify(err),
                 duration: 3000,
                 position: 'top'
               });
 
-              this.nav.present(toast);
+              toast.present();
             });
         
         });
       
     } else {
 
-      let toast = Toast.create({
+      let toast = this.toastCtrl.create({
         message: 'ข้อมูลไม่สมบูรณ์',
         duration: 3000,
         position: 'top'
       });
 
-      this.nav.present(toast);
+      toast.present();
       
     }
   }

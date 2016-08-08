@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, Platform, NavParams, Loading, Toast, Storage, LocalStorage } from 'ionic-angular';
+import { NavController, Platform, NavParams, LoadingController, ToastController, Storage, LocalStorage } from 'ionic-angular';
 
 import {Configure} from '../../providers/configure/configure';
 import {Encrypt} from '../../providers/encrypt/encrypt';
@@ -35,7 +35,9 @@ export class OutPatientPage implements OnInit {
     private encrypt: Encrypt,
     private config: Configure,
     private opd: Opd,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
   ) {
     this.url = this.config.getUrl();
     this.localStorage = new Storage(LocalStorage);
@@ -62,11 +64,11 @@ export class OutPatientPage implements OnInit {
 
   ngOnInit() {
 
-    let loading = Loading.create({
+    let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
 
-    this.nav.present(loading);
+    loading.present();
     
     let url = `${this.url}/api/doctor/service/history`;
   
@@ -98,13 +100,13 @@ export class OutPatientPage implements OnInit {
             loading.dismiss();
           }, err => {
             loading.dismiss();
-            let toast = Toast.create({
+            let toast = this.toastCtrl.create({
               message: 'เกิดข้อผิดพลาด ' + JSON.stringify(err),
               duration: 3000,
               position: 'top'
             });
 
-            this.nav.present(toast);
+            toast.present();
           });
       });
         

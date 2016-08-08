@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, Loading, Toast, Storage, LocalStorage } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ToastController, Storage, LocalStorage } from 'ionic-angular';
 
 import {Configure} from '../../providers/configure/configure';
 import {Encrypt} from '../../providers/encrypt/encrypt';
@@ -34,7 +34,9 @@ export class HhcEntryPage implements OnInit {
     private hhc: Hhc,
     private configure: Configure,
     private encrypt: Encrypt,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
   ) {
 
     this.communityServices = [];
@@ -45,11 +47,11 @@ export class HhcEntryPage implements OnInit {
   ngOnInit() {
     this.url = this.configure.getUrl();
 
-    let loading = Loading.create({
+    let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
 
-     this.nav.present(loading);
+    loading.present();
     
     let _url = `${this.url}/basic/community-service-type`;
     this.hhc.getCommunityServiceType(_url)
@@ -92,26 +94,26 @@ export class HhcEntryPage implements OnInit {
             .then(() => {
               this.nav.pop();
             }, err => {
-              let toast = Toast.create({
+              let toast = this.toastCtrl.create({
                 message: 'เกิดข้อผิดพลาด ' + JSON.stringify(err),
                 duration: 3000,
                 position: 'top'
               });
 
-              this.nav.present(toast);
+              toast.present();
             });
         
         });
       
     } else {
 
-      let toast = Toast.create({
+      let toast = this.toastCtrl.create({
         message: 'ข้อมูลไม่สมบูรณ์',
         duration: 3000,
         position: 'top'
       });
 
-      this.nav.present(toast);
+      toast.present();
       
     }
   }

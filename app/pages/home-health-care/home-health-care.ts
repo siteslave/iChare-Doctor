@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, Platform, ActionSheet, Loading, Toast, Alert, LocalStorage, Storage } from 'ionic-angular';
+import { NavController, Platform, ActionSheetController, LoadingController, ToastController, AlertController, LocalStorage, Storage } from 'ionic-angular';
 import {BarcodeScanner} from 'ionic-native';
 
 import * as _ from 'lodash';
@@ -43,7 +43,11 @@ export class HomeHealthCarePage implements OnInit {
     private configure: Configure,
     private encrypt: Encrypt,
     private hhc: Hhc,
-    private platform: Platform
+    private platform: Platform,
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
+    private actionSheetCtrl: ActionSheetController
   ) {
     this.localStorage = new Storage(LocalStorage);
     this.url = this.configure.getUrl();
@@ -55,7 +59,7 @@ export class HomeHealthCarePage implements OnInit {
   }
 
   showAction(hashKey) {
-    let actionSheet = ActionSheet.create({
+    let actionSheet = this.actionSheetCtrl.create({
       title: 'เมนูใช้งาน',
       buttons: [
         {
@@ -84,7 +88,8 @@ export class HomeHealthCarePage implements OnInit {
         }
       ]
     });
-    this.nav.present(actionSheet);
+    
+    actionSheet.present();
   }
 
   search(ev) {
@@ -96,11 +101,11 @@ export class HomeHealthCarePage implements OnInit {
 
   doSearch(query) {
 
-    let loading = Loading.create({
+    let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
 
-    this.nav.present(loading);
+    loading.present();
     
     if (query) {
       let url = `${this.url}/api/doctor/hhc/search`;

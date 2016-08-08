@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, Loading, Alert, Toast, Platform, ActionSheet, Storage, LocalStorage } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController, ToastController, Platform, ActionSheetController, Storage, LocalStorage } from 'ionic-angular';
 import {HhcHistoryDetailPage} from '../hhc-history-detail/hhc-history-detail';
 import * as moment from 'moment';
 
@@ -30,7 +30,10 @@ export class HhcHistoryPage implements OnInit {
     private hhc: Hhc,
     private configure: Configure,
     private encrypt: Encrypt,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
+    private actionSheetCtrl: ActionSheetController
   
   ) {
     this.localStorage = new Storage(LocalStorage);
@@ -54,11 +57,11 @@ export class HhcHistoryPage implements OnInit {
     this.localStorage.get('token')
       .then(token => {
 
-        let loading = Loading.create({
+        let loading = this.loadingCtrl.create({
           content: 'Please wait...'
         });
 
-        this.nav.present(loading);
+        loading.present();
 
         this.hhc.getHhcHistory(url, token, _params)
           .then(rows => {
@@ -78,13 +81,13 @@ export class HhcHistoryPage implements OnInit {
             loading.dismiss();
           }, err => {
             loading.dismiss();
-            let toast = Toast.create({
+            let toast = this.toastCtrl.create({
               message: 'เกิดข้อผิดพลาด ' + JSON.stringify(err),
               duration: 3000,
               position: 'top'
             });
 
-            this.nav.present(toast);
+            toast.present();
             console.log(err);
           });
       });
@@ -93,7 +96,7 @@ export class HhcHistoryPage implements OnInit {
 
   showAction(id) {
     console.log(id);
-    let actionSheet = ActionSheet.create({
+    let actionSheet = this.actionSheetCtrl.create({
       title: 'เมนูใช้งาน',
       buttons: [
         {
@@ -112,7 +115,7 @@ export class HhcHistoryPage implements OnInit {
       ]
     });
 
-    this.nav.present(actionSheet);
+    actionSheet.present();
 
   }
   

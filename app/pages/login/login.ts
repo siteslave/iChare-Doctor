@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, Toast, Loading, Storage, LocalStorage } from 'ionic-angular';
+import { NavController, ToastController, LoadingController, Storage, LocalStorage } from 'ionic-angular';
 
 import {TabsPage}  from '../tabs/tabs';
 import {Configure} from '../../providers/configure/configure';
@@ -30,7 +30,9 @@ export class LoginPage {
     private config: Configure,
     private encrypt: Encrypt,
     private login: Login,
-    private jwtHelper: JwtHelper
+    private jwtHelper: JwtHelper,
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController
   ) {
     this.url = this.config.getUrl();
     this.localStorage = new Storage(LocalStorage);
@@ -39,11 +41,12 @@ export class LoginPage {
   doLogin() {
 
     if (this.username && this.password) {
-      let loading = Loading.create({
+      let loading = this.loadingCtrl.create({
         content: 'Please wait...'
       });
     
-      this.nav.present(loading);
+      loading.present();
+
       let params = this.encrypt.encrypt({ username: this.username, password: this.password });
       let url = `${this.url}/api/login/doctor`;
       console.log(params);
@@ -63,23 +66,23 @@ export class LoginPage {
           this.nav.push(TabsPage);
 
         }, err => {
-          let toast = Toast.create({
+          let toast = this.toastCtrl.create({
             message: 'ชื่อผู้ใช้งาน หรือ รหัสผ่าน ไม่ถูกต้อง',
             duration: 3000,
             position: 'top'
           });
 
-          this.nav.present(toast);
+          toast.present();
           loading.dismiss();
         });
     } else {
-      let toast = Toast.create({
+      let toast = this.toastCtrl.create({
         message: 'ชื่อผู้ใช้งาน หรือ รหัสผ่าน ไม่ถูกต้อง',
         duration: 3000,
         position: 'top'
       });
 
-      this.nav.present(toast);
+      toast.present();
     }
   }
 
